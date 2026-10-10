@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WILD WITHIN — Become Your Tomorrow</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body>
+<header class="hero"><nav><b>▲ WILD WITHIN</b><span>FITNESS · NATURE · COMMUNITY</span></nav>
+<div class="hero-copy"><p class="eyebrow">YOUR REAL JOURNEY. YOUR LIVING ADVENTURE.</p>
+<h1>Escape today.<br><em>Become tomorrow.</em></h1><p>Every real step moves you through mountains, rivers, forests and glaciers.</p><a class="primary" href="#run">Start your journey ↗</a></div></header>
+<main>
+<section class="stats">
+<article><span>Today's distance</span><strong>{{ '%.2f'|format(today_km) }} <small>km</small></strong><p>Saved activity distance</p></article>
+<article><span>This month</span><strong>{{ '%.2f'|format(month_km) }} <small>km</small></strong><p>Every step adds up</p></article>
+<article><span>Virtual journey</span><strong id="virtualTotal">{{ '%.2f'|format(today_km) }} <small>km</small></strong><p>Real distance matched 1:1</p></article>
+</section>
+<div class="columns">
+<section class="panel" id="run"><p class="eyebrow">01 / MOVE IN REAL LIFE</p><h2>Your next 2 km adventure</h2>
+<p class="muted">Start GPS outdoors, or use the manual form for a clearly labelled demo entry.</p>
+<div class="big-distance"><strong id="distance">0.00</strong> <span>km</span></div>
+<div class="run-meta"><span id="duration">00:00</span><span id="gpsStatus">GPS not started</span></div>
+<div class="progress"><div id="runBar"></div></div><div class="actions">
+<button class="primary" id="startGps">Start GPS run</button><button class="secondary" id="stopGps" disabled>Finish run</button></div>
+<p class="hint" id="runMessage">The virtual journey mirrors saved activity distance. GPS may drift.</p>
+<details><summary>Manual test entry (not GPS verified)</summary>
+<label>Distance in km<input id="manualKm" type="number" min=".01" max="200" step=".01" value="2"></label>
+<label>Duration in minutes<input id="manualMinutes" type="number" min="0" max="1440" value="18"></label>
+<button class="secondary" id="saveManual">Save manual test</button></details></section>
+<section class="panel landscape"><p class="eyebrow">02 / EXPLORE YOUR INNER WILD</p>
+<h2 id="missionTitle">Mission: Riverstone Crossing</h2><p id="missionText">Travel 2 km to unlock the glacier lookout.</p>
+<div class="terrain"><div class="sun"></div><div class="peak peak-back"></div><div class="peak peak-front"></div><div class="river"></div><div class="trail"></div><div class="avatar">●</div></div>
+<div class="run-meta"><span>Trail progress</span><strong id="missionProgress">0.00 / 2 km</strong></div><div class="progress"><div id="missionBar"></div></div>
+<p class="hint">This starter uses an interactive landscape illustration, not a full 3D game world.</p></section></div>
+<div class="columns">
+<section class="panel"><p class="eyebrow">03 / BUILD YOUR RITUAL</p><h2>Your activities, your rules</h2>
+<form id="activityForm" class="stack"><label>Activity name<input id="activityTitle" maxlength="80" placeholder="e.g. Evening stretching" required></label>
+<div class="form-row"><label>Category<select id="activityCategory"><option>Fitness</option><option>Wellness</option><option>Mindfulness</option><option>Nutrition</option><option>Learning</option><option>Custom</option></select></label>
+<label>Minutes<input id="activityMinutes" type="number" min="1" max="1440" value="10" required></label></div><button class="primary">+ Add activity</button></form>
+<div class="activity-list">{% for a in activities %}<div class="activity"><div><b>{{ a['title'] }}</b><small>{{ a['category'] }} · {{ a['minutes'] }} min</small></div>
+{% if a['completed_date'] == today %}<span class="done">✓ Done today</span>{% else %}<button class="check" data-id="{{ a['id'] }}">Mark done</button>{% endif %}</div>{% endfor %}</div></section>
+<section class="panel"><p class="eyebrow">04 / FIND YOUR TRIBE</p><h2>Same ideology. Bigger journeys.</h2>
+<p class="muted">Share milestones and encourage each other. This feed is local to this demo installation.</p>
+<form id="postForm" class="stack"><label>Display name<input id="username" maxlength="30" value="TrailSeeker"></label>
+<label>Your post<textarea id="postBody" maxlength="500" rows="3" placeholder="One step closer to my tomorrow..." required></textarea></label>
+<label>Distance to share (km)<input id="postKm" type="number" min="0" max="200" step=".01" value="0"></label><button class="primary">Share with community</button></form>
+<div class="feed">{% for p in posts %}<article class="post"><div class="post-head"><b>{{ p['username'] }}</b><small>{{ p['created_at'] }}</small></div><p>{{ p['body'] }}</p>{% if p['distance'] %}<span class="tag">{{ '%.2f'|format(p['distance']) }} km journey</span>{% endif %}</article>{% endfor %}</div>
+<p class="hint">No accounts or cloud sync yet. Posts are stored in the local SQLite database.</p></section></div>
+<footer>WILD WITHIN · Your pace. Your path. Your people.</footer></main>
+<script src="{{ url_for('static',filename='app.js') }}"></script></body></html>
